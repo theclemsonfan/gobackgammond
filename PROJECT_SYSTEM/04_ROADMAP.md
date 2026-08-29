@@ -2,11 +2,11 @@
 
 ## R0 — Protected adoption
 
-Isolated branch and draft PR exist; `master` remains unchanged and unmerged.
+Isolated branch exists and is persisted; `master` remains unchanged and unmerged. Draft PR publication is still pending.
 
 ## R1 — Reproducible baseline
 
-Run the Makefile-equivalent Go build/test/vet commands in a Go-capable cloud environment and record exact evidence without modernization.
+Static baseline and `AMBER — STATIC_BASELINE_ESTABLISHED / EXECUTABLE_BASELINE_PENDING` health classification are recorded. Run the Makefile-equivalent Go build/test/vet commands in a Go-capable cloud environment and record exact evidence without modernization.
 
 ## R2 — Behavior-preserving validation
 
@@ -19,4 +19,3 @@ Validate five-task continuation, owner-question deferral, Overwatch classificati
 ## R4 — Owner review
 
 Reconcile live branch evidence. Merge, deployment, server productionization, and dependency/toolchain modernization remain separate owner decisions.
-

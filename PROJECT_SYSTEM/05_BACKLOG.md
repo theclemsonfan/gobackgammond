@@ -6,7 +6,7 @@
 2. `R2-002` — created the isolated retrofit branch without changing `master` or production.
 3. `R2-003` — installed the repository-specific environment manifest and scoped missing Go as a partial blocker.
 4. `R2-004` — recorded the baseline contract, existing test surface, build commands, dependency pins, and safety boundaries.
-5. `R2-005` — installed Overwatch/persistence/handoff state and prepared draft-review verification.
+5. `R2-005` — completed the static baseline, health classification, evidence-backed gap analysis, Overwatch/persistence state, and durable handoff.
 
 ## Next five safe outcomes
 
@@ -17,4 +17,3 @@
 5. `R2-010` — reconcile live branch SHA, test evidence, and draft PR state; leave the next exact handoff.
 
 Move repository-changing work to completed only after `PERSISTED`; a partial blocker never stops unrelated ready work.
-
