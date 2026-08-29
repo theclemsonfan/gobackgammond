@@ -6,11 +6,11 @@ Isolated branch exists and is persisted; `master` remains unchanged and unmerged
 
 ## R1 — Reproducible baseline
 
-Static baseline and `AMBER — STATIC_BASELINE_ESTABLISHED / EXECUTABLE_BASELINE_PENDING` health classification are recorded. Run the Makefile-equivalent Go build/test/vet commands in a Go-capable cloud environment and record exact evidence without modernization.
+Complete. The unchanged application passed test, vet, build, startup, and route smoke checks on the verified Go `1.27.0` cloud baseline without modernization.
 
 ## R2 — Behavior-preserving validation
 
-Characterize HTTP routes, deterministic seed behavior, handler inputs/state flow, SVG rendering, and server lifecycle. Add only small reversible tests where gaps are proven.
+In progress. Root, token parsing, turn-selection, new-game, invalid-state, and existing SVG contracts are now covered by dependency-free tests. Valid serialized-state/victory flows, coverage measurement, and lifecycle risk documentation remain.
 
 ## R3 — Autonomous continuity
 

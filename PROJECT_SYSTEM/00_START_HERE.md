@@ -13,10 +13,10 @@ Establish a reproducible, behavior-preserving baseline and durable cloud-first c
 
 ## Current five-outcome batch
 
-1. Fingerprint repository topology and preserved base.
-2. Install the Project OS control plane on the isolated branch.
-3. Record the Go environment and executable baseline evidence.
-4. Open an unmerged draft retrofit PR and verify persistence.
-5. Queue the next five behavior-preserving validation tasks with an exact handoff.
+1. Draft PR: prepared; GitHub integration write rejected; browser submission awaits required action-time confirmation.
+2. Go-capable path: complete and verified on GitHub Actions.
+3. Test/vet/build/startup smoke: complete and green on unchanged and remediated branch commits.
+4. Prioritized split backlog: complete, with process gaps separated from application defects and unproven risks.
+5. Highest-value safe remediation: complete; pinned Go `1.27.0` and dependency-free handler characterization tests are green.
 
 Stop only for completed authorized scope, a safety/permission boundary, or one blocker that prevents every remaining safe workstream.
