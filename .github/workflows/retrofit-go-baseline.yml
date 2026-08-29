@@ -25,10 +25,10 @@ jobs:
       - name: Check out the exact branch revision
         uses: actions/checkout@v7
 
-      - name: Install the current stable Go toolchain
+      - name: Install the verified Go toolchain
         uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version: '1.27.0'
           cache-dependency-path: go.sum
 
       - name: Record toolchain and module environment
