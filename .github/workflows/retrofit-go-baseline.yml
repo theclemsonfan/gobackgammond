@@ -1,0 +1,75 @@
+name: Retrofit Go baseline
+
+on:
+  push:
+    branches:
+      - project-os/retrofit-pilot-2
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: retrofit-go-baseline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    name: Go baseline (no deploy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the exact branch revision
+        uses: actions/checkout@v7
+
+      - name: Install the current stable Go toolchain
+        uses: actions/setup-go@v7
+        with:
+          go-version: stable
+          cache-dependency-path: go.sum
+
+      - name: Record toolchain and module environment
+        run: |
+          go version
+          go env GOMOD GOPROXY GOOS GOARCH
+
+      - name: Test existing behavior
+        run: go test ./...
+
+      - name: Vet existing behavior
+        run: go vet ./...
+
+      - name: Build server without publishing an artifact
+        run: go build -o "${RUNNER_TEMP}/gobackgammond" .
+
+      - name: Startup and HTTP route smoke check
+        run: |
+          "${RUNNER_TEMP}/gobackgammond" -port=18080 -seed=37 >"${RUNNER_TEMP}/server.log" 2>&1 &
+          server_pid=$!
+          cleanup() {
+            kill "$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          ready=0
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if curl --fail --silent --show-error --output "${RUNNER_TEMP}/root.html" http://127.0.0.1:18080/; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$ready" -ne 1 ]; then
+            echo "server did not become ready"
+            sed -n '1,120p' "${RUNNER_TEMP}/server.log"
+            exit 1
+          fi
+
+          grep -F '<title>Backgammon</title>' "${RUNNER_TEMP}/root.html"
+          curl --fail --silent --show-error --output "${RUNNER_TEMP}/game.html" http://127.0.0.1:18080/game
+          grep -F '<title>Backgammon Game</title>' "${RUNNER_TEMP}/game.html"
