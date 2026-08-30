@@ -8,6 +8,8 @@ import (
 	"testing"
 )
 
+const nearlyFinishedGameToken = "qlYqKlWyUjIxIhBShoawsEK4JNwEYa2hiVItIAAA__8"
+
 func TestRootHandlerContract(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	RootHandler(recorder, httptest.NewRequest(http.MethodGet, "/", nil))
@@ -128,5 +130,60 @@ func TestHandlersRejectInvalidGameState(t *testing.T) {
 				t.Errorf("response body = %q, want text containing %q", recorder.Body.String(), test.want)
 			}
 		})
+	}
+}
+
+func TestHandlersAcceptValidCompressedGameState(t *testing.T) {
+	rand.Seed(37)
+
+	t.Run("game", func(t *testing.T) {
+		recorder := httptest.NewRecorder()
+		GameHandler(recorder, httptest.NewRequest(http.MethodGet, "/game?s="+nearlyFinishedGameToken, nil))
+
+		if recorder.Code != http.StatusOK {
+			t.Fatalf("status = %d, want %d; body = %s", recorder.Code, http.StatusOK, recorder.Body.String())
+		}
+		for _, want := range []string{"<title>Backgammon Game</title>", "/game.svg?s="} {
+			if !strings.Contains(recorder.Body.String(), want) {
+				t.Errorf("response body does not contain %q", want)
+			}
+		}
+	})
+
+	t.Run("svg", func(t *testing.T) {
+		recorder := httptest.NewRecorder()
+		SvgHandler(recorder, httptest.NewRequest(http.MethodGet, "/game.svg?s="+nearlyFinishedGameToken, nil))
+
+		if recorder.Code != http.StatusOK {
+			t.Fatalf("status = %d, want %d; body = %s", recorder.Code, http.StatusOK, recorder.Body.String())
+		}
+		if got := recorder.Header().Get("Content-Type"); got != "image/svg+xml" {
+			t.Errorf("Content-Type = %q, want %q", got, "image/svg+xml")
+		}
+		for _, want := range []string{"<?xml version=\"1.0\"?>", "<svg", "</svg>"} {
+			if !strings.Contains(recorder.Body.String(), want) {
+				t.Errorf("response body does not contain %q", want)
+			}
+		}
+	})
+}
+
+func TestGameHandlerVictoryContract(t *testing.T) {
+	rand.Seed(37)
+	recorder := httptest.NewRecorder()
+	GameHandler(recorder, httptest.NewRequest(http.MethodGet, "/game?s="+nearlyFinishedGameToken+"&t=", nil))
+
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("status = %d, want %d; body = %s", recorder.Code, http.StatusOK, recorder.Body.String())
+	}
+	for _, want := range []string{
+		"<title>Backgammon Game Results</title>",
+		"The final board is",
+		"The final score is",
+		"Congratulations on winning",
+	} {
+		if !strings.Contains(recorder.Body.String(), want) {
+			t.Errorf("response body does not contain %q", want)
+		}
 	}
 }

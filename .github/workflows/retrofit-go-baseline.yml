@@ -39,6 +39,11 @@ jobs:
       - name: Test existing behavior
         run: go test ./...
 
+      - name: Measure package coverage without publishing an artifact
+        run: |
+          go test -coverprofile="${RUNNER_TEMP}/coverage.out" ./...
+          go tool cover -func="${RUNNER_TEMP}/coverage.out"
+
       - name: Vet existing behavior
         run: go vet ./...
 
