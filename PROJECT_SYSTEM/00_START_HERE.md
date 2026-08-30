@@ -13,10 +13,10 @@ Establish a reproducible, behavior-preserving baseline and durable cloud-first c
 
 ## Current five-outcome batch
 
-1. Draft PR: prepared; GitHub integration write rejected; browser submission awaits required action-time confirmation.
-2. Go-capable path: complete and verified on GitHub Actions.
-3. Test/vet/build/startup smoke: complete and green on unchanged and remediated branch commits.
-4. Prioritized split backlog: complete, with process gaps separated from application defects and unproven risks.
-5. Highest-value safe remediation: complete; pinned Go `1.27.0` and dependency-free handler characterization tests are green.
+1. Go-capable path: reconfirmed on GitHub Actions with exact Go `1.27.0` on Ubuntu 24.04 Linux/amd64.
+2. Test/vet/build/startup smoke: green at commit `79a53610e5707f333e27e164d26981c6e0a2878b`; total statement coverage measured at 64.2%.
+3. PR diff audit: complete, with process gaps, application defects, and legacy/dependency risks separated.
+4. Highest-value safe remediation: valid compressed-state, SVG, and take-turn characterization added without production-source or dependency changes.
+5. Durable controls: testing, backlog, owner inbox, health, Overwatch, and handoff reconciled with live draft PR #1.
 
 Stop only for completed authorized scope, a safety/permission boundary, or one blocker that prevents every remaining safe workstream.

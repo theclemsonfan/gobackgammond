@@ -29,6 +29,18 @@ The Makefile defines `go test ./...`, `go vet ./...`, `go build .`, coverage, an
 - Startup, root route, and new-game route smoke checks: pass.
 - New test contracts: root response, token missing/single/empty/multiple/malformed cases, turn-selection query behavior, deterministic new-game response, invalid game state rejection for HTML and SVG.
 
+## Expanded characterization and coverage
+
+- Failed evidence retained: push run `33283733265`, job `99183176018`, commit `7b492996b7d8aebf7ad173e9ad7cda9fd6f2e188`, failed in `go test ./...` because a proposed test incorrectly assumed the documented nearly-finished game must produce immediate victory after one seeded turn. Vet, build, and smoke were skipped after the test failure. No application defect was demonstrated.
+- Correction: commit `79a53610e5707f333e27e164d26981c6e0a2878b` changed only that test contract from immediate-victory assertion to valid take-turn outcome characterization.
+- Successful evidence: push run `33283773288`, job `99183283407`, and PR run `33283775027`, 2026-08-30 00:38 UTC, Go `1.27.0` Linux/amd64 on Ubuntu 24.04.
+- `go test ./...`: pass; handlers `0.009s`, SVG cached, root package has no tests.
+- Coverage: handlers 67.5%, SVG 100.0%, root package 0.0%, total statements 64.2%; profile stayed in runner temporary storage and no artifact was published.
+- `go vet ./...`: pass.
+- `go build -o "$RUNNER_TEMP/gobackgammond" .`: pass.
+- Startup on localhost port 18080 with seed 37, root route, and new-game route: pass.
+- Added contracts: valid compressed state renders game HTML, valid compressed state renders an SVG response with the expected media type, and a seeded take-turn request returns either the continued-game or victory template permitted by current behavior.
+
 Do not misstate static inspection as executable or CI evidence. Future results must record command, host, timestamp, branch SHA, output/result, and whether the evidence is local, cloud-run, CI, or independently read from GitHub.
 
 ## Static audit evidence

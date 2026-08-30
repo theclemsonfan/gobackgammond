@@ -2,7 +2,7 @@
 
 ## R0 — Protected adoption
 
-Isolated branch exists and is persisted; `master` remains unchanged and unmerged. Draft PR publication is still pending.
+Isolated branch exists and is persisted; draft PR #1 is open, draft, and unmerged; `master` remains unchanged.
 
 ## R1 — Reproducible baseline
 
@@ -10,7 +10,7 @@ Complete. The unchanged application passed test, vet, build, startup, and route 
 
 ## R2 — Behavior-preserving validation
 
-In progress. Root, token parsing, turn-selection, new-game, invalid-state, and existing SVG contracts are now covered by dependency-free tests. Valid serialized-state/victory flows, coverage measurement, and lifecycle risk documentation remain.
+In progress. Root, token parsing, turn-selection, new-game, invalid-state, valid compressed-state, SVG route, take-turn, and existing SVG rendering contracts are covered by dependency-free tests. Coverage is measured at 67.5% for handlers, 100.0% for SVG, and 64.2% repository-wide. Deterministic victory coverage and owner-reserved lifecycle changes remain.
 
 ## R3 — Autonomous continuity
 

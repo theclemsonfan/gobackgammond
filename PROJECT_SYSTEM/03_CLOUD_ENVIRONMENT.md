@@ -20,5 +20,6 @@ The verified baseline is:
 - Actions: `actions/checkout@v7` and `actions/setup-go@v7`.
 - First executable baseline: run `33281569224`, commit `68919e3ef4a8f9db8c0e73d133941dc81831eee4`, success.
 - Remediation verification: run `33281651519`, commit `2190711eafa31b6d4c4f16f034002caf02a1f930`, success.
+- Expanded verification: push run `33283773288` and PR run `33283775027`, commit `79a53610e5707f333e27e164d26981c6e0a2878b`, success.
 
 The controller host still has no local Go executable, but that is no longer a validation blocker because the cloud path is durable and verified. Do not add a `go` directive, change dependency pins, or modify application behavior merely to match this environment.
