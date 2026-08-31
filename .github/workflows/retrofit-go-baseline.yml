@@ -12,6 +12,13 @@ on:
 permissions:
   contents: read
 
+env:
+  GO_VERSION: '1.27.0'
+  GOVULNCHECK_VERSION: 'v1.7.0'
+  GOTOOLCHAIN: local
+  GOFLAGS: -mod=readonly
+  GOPROXY: https://proxy.golang.org,direct
+
 concurrency:
   group: retrofit-go-baseline-${{ github.ref }}
   cancel-in-progress: true
@@ -19,7 +26,7 @@ concurrency:
 jobs:
   baseline:
     name: Go baseline (no deploy)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - name: Check out the exact branch revision
@@ -28,7 +35,7 @@ jobs:
       - name: Install the verified Go toolchain
         uses: actions/setup-go@v7
         with:
-          go-version: '1.27.0'
+          go-version: ${{ env.GO_VERSION }}
           cache-dependency-path: go.sum
 
       - name: Record toolchain and module environment
@@ -46,6 +53,9 @@ jobs:
 
       - name: Vet existing behavior
         run: go vet ./...
+
+      - name: Check reachable known vulnerabilities
+        run: go run golang.org/x/vuln/cmd/govulncheck@${GOVULNCHECK_VERSION} ./...
 
       - name: Build server without publishing an artifact
         run: go build -o "${RUNNER_TEMP}/gobackgammond" .
@@ -78,3 +88,8 @@ jobs:
           grep -F '<title>Backgammon</title>' "${RUNNER_TEMP}/root.html"
           curl --fail --silent --show-error --output "${RUNNER_TEMP}/game.html" http://127.0.0.1:18080/game
           grep -F '<title>Backgammon Game</title>' "${RUNNER_TEMP}/game.html"
+          curl --fail --silent --show-error --output "${RUNNER_TEMP}/game.svg" 'http://127.0.0.1:18080/game.svg?s=qlYqKlWyUjIxIhBShoawsEK4JNwEYa2hiVItIAAA__8'
+          grep -F '<svg' "${RUNNER_TEMP}/game.svg"
+          invalid_status=$(curl --silent --show-error --output "${RUNNER_TEMP}/invalid.txt" --write-out '%{http_code}' http://127.0.0.1:18080/game?s=not-a-board)
+          test "$invalid_status" = '400'
+          grep -F 'error deserializing game state:' "${RUNNER_TEMP}/invalid.txt"

@@ -1,11 +1,15 @@
 package handlers
 
 import (
+	"bytes"
 	"math/rand"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
+
+	bgjson "github.com/chandler37/gobackgammon/json"
 )
 
 const nearlyFinishedGameToken = "qlYqKlWyUjIxIhBShoawsEK4JNwEYa2hiVItIAAA__8"
@@ -70,6 +74,7 @@ func TestShouldTakeTurnContract(t *testing.T) {
 		{target: "/game?s=state", want: false},
 		{target: "/game?s=state&t=", want: true},
 		{target: "/game?s=state&t=anything", want: true},
+		{target: "/game?s=state&t=one&t=two", want: true},
 		{target: "/game?s=%zz&t=", want: false},
 	}
 
@@ -117,8 +122,12 @@ func TestHandlersRejectInvalidGameState(t *testing.T) {
 		want    string
 	}{
 		{name: "game", handler: GameHandler, target: "/game?s=not-a-board", want: "error deserializing game state:"},
+		{name: "game multiple tokens", handler: GameHandler, target: "/game?s=one&s=two", want: "error getting token: too many games found"},
+		{name: "game malformed query", handler: GameHandler, target: "/game?s=%zz", want: "error getting token: bad URL:"},
 		{name: "svg", handler: SvgHandler, target: "/game.svg?s=not-a-board", want: "error deserializing game state:"},
 		{name: "svg missing token", handler: SvgHandler, target: "/game.svg", want: "error getting token: no game found"},
+		{name: "svg multiple tokens", handler: SvgHandler, target: "/game.svg?s=one&s=two", want: "error getting token: too many games found"},
+		{name: "svg malformed query", handler: SvgHandler, target: "/game.svg?s=%zz", want: "error getting token: bad URL:"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			recorder := httptest.NewRecorder()
@@ -130,6 +139,110 @@ func TestHandlersRejectInvalidGameState(t *testing.T) {
 				t.Errorf("response body = %q, want text containing %q", recorder.Body.String(), test.want)
 			}
 		})
+	}
+}
+
+func TestHandlersAcceptValidUncompressedGameState(t *testing.T) {
+	serialization, err := bgjson.Decompress(nearlyFinishedGameToken)
+	if err != nil {
+		t.Fatalf("decompress fixture: %v", err)
+	}
+	token := url.QueryEscape(serialization)
+
+	for _, test := range []struct {
+		name        string
+		handler     http.HandlerFunc
+		target      string
+		contentType string
+		want        string
+	}{
+		{name: "game", handler: GameHandler, target: "/game?s=" + token, want: "<title>Backgammon Game</title>"},
+		{name: "svg", handler: SvgHandler, target: "/game.svg?s=" + token, contentType: "image/svg+xml", want: "<svg"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			rand.Seed(37)
+			recorder := httptest.NewRecorder()
+			test.handler(recorder, httptest.NewRequest(http.MethodGet, test.target, nil))
+
+			if recorder.Code != http.StatusOK {
+				t.Fatalf("status = %d, want %d; body = %s", recorder.Code, http.StatusOK, recorder.Body.String())
+			}
+			if test.contentType != "" && recorder.Header().Get("Content-Type") != test.contentType {
+				t.Errorf("Content-Type = %q, want %q", recorder.Header().Get("Content-Type"), test.contentType)
+			}
+			if !strings.Contains(recorder.Body.String(), test.want) {
+				t.Errorf("response body does not contain %q", test.want)
+			}
+		})
+	}
+}
+
+func TestSmartBoardsAIAndSerializationContract(t *testing.T) {
+	rand.Seed(37)
+	serialization, err := bgjson.Decompress(nearlyFinishedGameToken)
+	if err != nil {
+		t.Fatalf("decompress fixture: %v", err)
+	}
+	board, err := bgjson.Deserialize(serialization)
+	if err != nil {
+		t.Fatalf("deserialize fixture: %v", err)
+	}
+
+	got, err := smartBoards(board.LegalContinuations())
+	if err != nil {
+		t.Fatalf("smartBoards: %v", err)
+	}
+	if len(got) == 0 {
+		t.Fatal("smartBoards returned no AI-ranked continuations")
+	}
+	if !strings.HasPrefix(got[0].Hint, "PlayerConservative's choice") {
+		t.Errorf("first hint = %q, want PlayerConservative choice marker", got[0].Hint)
+	}
+	for i, candidate := range got {
+		if candidate.Board == nil {
+			t.Fatalf("candidate %d has a nil board", i)
+		}
+		serialized, err := bgjson.Decompress(candidate.Serialization)
+		if err != nil {
+			t.Fatalf("candidate %d is not valid compressed serialization: %v", i, err)
+		}
+		decoded, err := bgjson.Deserialize(serialized)
+		if err != nil || decoded == nil {
+			t.Fatalf("candidate %d does not deserialize: board=%v err=%v", i, decoded, err)
+		}
+	}
+}
+
+func TestDynamicTemplateValuesAreEscaped(t *testing.T) {
+	malicious := `"><script>alert("x")</script>`
+
+	var game bytes.Buffer
+	err := gameTemplate.Execute(&game, state{
+		Board: smartBoard{Serialization: malicious},
+		LegalContinuations: []smartBoard{{
+			Serialization: malicious,
+			Hint:          malicious,
+		}},
+	})
+	if err != nil {
+		t.Fatalf("execute game template: %v", err)
+	}
+	if strings.Contains(game.String(), "<script>") {
+		t.Fatalf("game template emitted executable input: %s", game.String())
+	}
+
+	var victory bytes.Buffer
+	err = victoryTemplate.Execute(&victory, victoryState{
+		Serialization: malicious,
+		Stakes:        malicious,
+		Victor:        malicious,
+		Score:         malicious,
+	})
+	if err != nil {
+		t.Fatalf("execute victory template: %v", err)
+	}
+	if strings.Contains(victory.String(), "<script>") {
+		t.Fatalf("victory template emitted executable input: %s", victory.String())
 	}
 }
 
