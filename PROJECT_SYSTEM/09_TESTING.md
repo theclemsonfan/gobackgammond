@@ -54,6 +54,7 @@ The Makefile defines `go test ./...`, `go vet ./...`, `go build .`, coverage, an
 - `go build -o "${RUNNER_TEMP}/gobackgammond" .`: pass; no artifact published.
 - Startup/smoke: pass on localhost port 18080 with seed 37; root HTML, new-game HTML, valid SVG rendering, and invalid-state HTTP 400/error text all matched.
 - Independently read live state after the run: PR #1 remained open, draft, mergeable/clean, and unmerged; base `master` remained `2ab7266c52dbbccee113d7614e2af868eb9aabaa`; head was `69eab3c9852e647373c8757af7b8f3ac8e881494`; both branches reported protection disabled.
+- Documentation persistence verification: push run `33350002209` and PR run `33350004490` passed at `384b7f497695476a32b4b9fbe7fe7902f1c953eb`. Local and remote `PROJECT_SYSTEM/` blob SHAs matched exactly; PR #1 remained open/draft/clean/unmerged, `master` remained unchanged, and both branches still reported protection disabled.
 
 Do not misstate static inspection as executable or CI evidence. Future results must record command, host, timestamp, branch SHA, output/result, and whether the evidence is local, cloud-run, CI, or independently read from GitHub.
 
