@@ -41,6 +41,20 @@ The Makefile defines `go test ./...`, `go vet ./...`, `go build .`, coverage, an
 - Startup on localhost port 18080 with seed 37, root route, and new-game route: pass.
 - Added contracts: valid compressed state renders game HTML, valid compressed state renders an SVG response with the expected media type, and a seeded take-turn request returns either the continued-game or victory template permitted by current behavior.
 
+## Hardened reproducibility, risk coverage, and security evidence
+
+- Source: GitHub Actions push run `33349587401`, job `99360182171`, and PR run `33349589876`.
+- Timestamp: 2026-08-31 02:05–02:06 UTC.
+- Branch/SHA: `project-os/retrofit-pilot-2` at `69eab3c9852e647373c8757af7b8f3ac8e881494`.
+- Environment: explicit Ubuntu 24.04; Go `1.27.0`; `GOTOOLCHAIN=local`; `GOFLAGS=-mod=readonly`; `GOPROXY=https://proxy.golang.org,direct`.
+- `go test ./...`: pass. Added handler-level malformed/multiple-token routing checks, uncompressed serialization compatibility for HTML and SVG, AI-ranked continuation and compressed serialization round trips, multiple turn parameters, and dynamic template escaping.
+- Coverage: handlers 70.2%, SVG 100.0%, root package 0.0%, total statements 66.4%. `smartBoards` reached 93.8%; token, turn selection, root, SVG handler, and template constructors reached 100%. The remaining `GameHandler` seam is primarily deterministic victory/error construction; `main` remains covered by process smoke rather than unit tests.
+- `go vet ./...`: pass.
+- `go run golang.org/x/vuln/cmd/govulncheck@v1.7.0 ./...`: pass; `No vulnerabilities found.` This is a known-vulnerability database result, not proof that the historical dependencies are maintained or risk-free.
+- `go build -o "${RUNNER_TEMP}/gobackgammond" .`: pass; no artifact published.
+- Startup/smoke: pass on localhost port 18080 with seed 37; root HTML, new-game HTML, valid SVG rendering, and invalid-state HTTP 400/error text all matched.
+- Independently read live state after the run: PR #1 remained open, draft, mergeable/clean, and unmerged; base `master` remained `2ab7266c52dbbccee113d7614e2af868eb9aabaa`; head was `69eab3c9852e647373c8757af7b8f3ac8e881494`; both branches reported protection disabled.
+
 Do not misstate static inspection as executable or CI evidence. Future results must record command, host, timestamp, branch SHA, output/result, and whether the evidence is local, cloud-run, CI, or independently read from GitHub.
 
 ## Static audit evidence

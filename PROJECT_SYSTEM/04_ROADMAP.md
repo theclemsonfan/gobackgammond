@@ -10,11 +10,11 @@ Complete. The unchanged application passed test, vet, build, startup, and route 
 
 ## R2 — Behavior-preserving validation
 
-In progress. Root, token parsing, turn-selection, new-game, invalid-state, valid compressed-state, SVG route, take-turn, and existing SVG rendering contracts are covered by dependency-free tests. Coverage is measured at 67.5% for handlers, 100.0% for SVG, and 64.2% repository-wide. Deterministic victory coverage and owner-reserved lifecycle changes remain.
+Complete for this safe batch. Root, routing errors, token parsing, turn-selection, new-game, invalid-state, compressed and uncompressed state, AI ordering, serialization round trips, template escaping, SVG, take-turn, and existing rendering contracts are covered. Coverage is 70.2% for handlers, 100.0% for SVG, and 66.4% repository-wide. Deterministic victory coverage remains a future evidence task; lifecycle changes remain owner-reserved.
 
 ## R3 — Autonomous continuity
 
-Validate five-task continuation, owner-question deferral, Overwatch classification, duplicate suppression, persistence verification, stale-packet reconciliation, and exact handoff.
+Complete for the second-pilot lessons. CI evidence, browser fallback, branch-protection limitations, persistence verification, stale-packet reconciliation, and exact handoff are durable.
 
 ## R4 — Owner review
 

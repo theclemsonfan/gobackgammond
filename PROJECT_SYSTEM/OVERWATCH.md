@@ -6,6 +6,6 @@ Evaluate in order: `OWNER_ACTION_REQUIRED` when an owner/safety boundary blocks 
 
 Use duplicate key `repository + PR/ref + head SHA + exact next-action fingerprint`. Suppress equivalent unresolved nudges, active matching work, and requests whose contents are already durable. A task summary or task-local commit never proves persistence. Record pre/post SHA and exact file evidence after every relaunch or controller recovery.
 
-Current classification: `HEALTHY_ACTIVE` until the third-batch documentation commit is persisted and independently verified, then `APPROVED_IDLE`. Draft PR #1 is open, draft, and unmerged; no owner question blocks this batch. Duplicate key: `theclemsonfan/gobackgammond|PR-1|79a53610e5707f333e27e164d26981c6e0a2878b|persist-and-verify-third-batch-handoff`.
+Current classification: `HEALTHY_ACTIVE` until the fourth-batch documentation commit and master Project OS package are persisted and independently verified, then `APPROVED_IDLE`. Draft PR #1 is open, draft, and unmerged; no owner question blocks this batch. Duplicate key: `theclemsonfan/gobackgammond|PR-1|69eab3c9852e647373c8757af7b8f3ac8e881494|persist-verify-fourth-batch-and-master-lessons`.
 
 Continuation maturity is `MONITOR_ONLY` → `TRIGGER_AVAILABLE` → `DIRECT_PERSISTENCE_UNVERIFIED` → `CONTROLLER_PERSISTENCE_AVAILABLE` → `AUTO_NUDGE_AVAILABLE`; do not skip levels based on summaries.

@@ -24,6 +24,14 @@
 4. `R2-014` — audited the PR diff and separated Project OS/process gaps, actual application defects, and legacy/dependency risks; no production-source change or demonstrated application defect was found.
 5. `R2-015` — added valid compressed-state, SVG response, and take-turn characterization plus durable coverage reporting; no application behavior or dependency changed.
 
+## Completed fourth five-task batch outcomes
+
+1. `R2-016` — made Ubuntu 24.04, Go `1.27.0`, local toolchain selection, read-only module mode, proxy behavior, and the CI evidence contract explicit.
+2. `R2-017` — added risk-focused routing, uncompressed-state, AI, serialization, template-escaping, SVG, and invalid-state checks; push and PR workflows passed, with total coverage rising from 64.2% to 66.4%.
+3. `R2-018` — ran pinned `govulncheck v1.7.0` and completed the dependency/legacy/lifecycle/security audit; no reachable known vulnerabilities were reported and no dependency was upgraded.
+4. `R2-019` — hardened the retrofit control plane with CI evidence requirements, draft-PR browser fallback, branch-protection limits, and exact persistence/handoff verification.
+5. `R2-020` — prepared the validated second-pilot lessons for the reusable Project OS master and left exact pilot/master next actions.
+
 ## Project OS / process gaps
 
 | Priority | ID | Gap | Evidence / next safe action | Decision boundary |
@@ -44,14 +52,14 @@ No application defect is currently demonstrated. The unchanged production applic
 |---|---|---|---|---|
 | P1 | `APP-RISK-001` | The default mux and blocking server lifecycle limit isolated lifecycle testing and graceful shutdown. | Document seams and failure modes; do not refactor yet. | Productionization is owner-reserved. |
 | P1 | `APP-RISK-002` | Randomness is process-global, so test isolation depends on serial seeded execution. | Add deterministic cases only when they do not require concurrency or redesign. | Randomness redesign is product/architecture work. |
-| P1 | `APP-RISK-003` | Valid serialized-state and take-turn paths are covered, but deterministic victory coverage is still absent. | Find or construct a dependency-supported terminal state before adding a reversible contract. | Preserve current observable behavior. |
+| P1 | `APP-RISK-003` | Valid serialized-state and take-turn paths are covered, but deterministic victory routing coverage is still absent. | Find or construct a dependency-supported terminal state before adding a reversible contract. | Preserve current observable behavior. |
 | P2 | `APP-RISK-004` | SVG golden-test failure output is coarse and adapter coverage is unknown. | Record coverage, then improve test diagnostics without changing rendering. | No dependency changes. |
 
 ## Legacy / dependency risks
 
 | Priority | ID | Risk | Next safe evidence | Decision boundary |
 |---|---|---|---|---|
-| P1 | `LEGACY-001` | Direct dependencies are historically pinned; their current vulnerability/support posture is unverified. | Run read-only advisory analysis when an approved tool is available. | Do not update dependencies without owner approval. |
+| P1 | `LEGACY-001` | Direct dependencies are historically pinned; `govulncheck v1.7.0` found no reachable known vulnerabilities, but maintenance/support posture remains uncertain. | Re-run the pinned scanner periodically and review upstream support before any upgrade proposal. | Do not update dependencies without owner approval. |
 | P1 | `LEGACY-002` | `go.mod` has no `go` directive or support policy. | Continue exact Go `1.27.0` evidence. | Module-policy change is owner-reserved. |
 | P1 | `LEGACY-003` | Default mux, blocking server lifecycle, and global RNG reduce isolation and graceful-shutdown options. | Preserve documented seams and failure modes. | Refactoring is product/architecture work. |
 

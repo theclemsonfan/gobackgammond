@@ -19,7 +19,7 @@ This audit is derived from read-only inspection of `README.md`, `Makefile`, `go.
 
 The executable baseline is green on the isolated retrofit branch. GitHub Actions run `33281569224` verified the unchanged application at commit `68919e3ef4a8f9db8c0e73d133941dc81831eee4` with Go `1.27.0` on Linux/amd64: test, vet, build, process startup, `/`, and `/game` all passed. Run `33281651519` then verified the pinned toolchain and dependency-free handler characterization tests at commit `2190711eafa31b6d4c4f16f034002caf02a1f930`.
 
-Run `33283773288` verified the expanded characterization at commit `79a53610e5707f333e27e164d26981c6e0a2878b`: test, coverage, vet, build, startup, `/`, and `/game` passed. Handler statement coverage is 67.5%, SVG coverage is 100.0%, and repository-wide statement coverage is 64.2%.
+Run `33349587401` and job `99360182171` verified the hardened characterization at commit `69eab3c9852e647373c8757af7b8f3ac8e881494`: test, coverage, vet, pinned `govulncheck v1.7.0`, build, startup, `/`, `/game`, `/game.svg`, and invalid-state HTTP checks passed. Handler statement coverage is 70.2%, SVG coverage is 100.0%, and repository-wide statement coverage is 66.4%. Govulncheck reported no reachable known vulnerabilities.
 
 Overall health remains amber because branch protection is procedural, the historical dependencies and module contract have no declared support policy, and server lifecycle productionization is explicitly out of scope. Draft PR #1 is open, draft, and unmerged. No application defect was demonstrated by this batch.
 
@@ -43,12 +43,31 @@ None demonstrated. One proposed victory assertion failed in run `33283733265`; i
 - Process-global randomness and default-mux/blocking-server lifecycle constrain test isolation and graceful shutdown.
 - These are risks or architectural constraints, not proven defects, and remediation requires owner policy or product decisions.
 
+## Maintenance and modernization classification
+
+### Safe maintenance completed
+
+- Fixed the CI runner label to Ubuntu 24.04 and made Go `1.27.0`, local toolchain selection, read-only module mode, proxy behavior, and `govulncheck v1.7.0` explicit.
+- Added dependency-free behavior characterization for routing failures, compressed/uncompressed state compatibility, AI ordering, serialization round trips, template escaping, SVG smoke, and invalid-state HTTP behavior.
+- Preserved `main.go`, `handlers/handlers.go`, `svg/svg.go`, `go.mod`, `go.sum`, dependency pins, default branch, and production behavior.
+
+### Future modernization
+
+- Evaluate supported Go versions, add a module `go` directive/support matrix, and assess the v0.1.8 game library only as a planned compatibility project.
+- Consider an explicit `http.Server`, dedicated mux, timeouts, graceful shutdown, request/body limits where applicable, structured logging, and isolated RNG injection.
+- Decide whether to pin GitHub Actions to immutable SHAs and establish an update cadence.
+
+### Owner-reserved changes
+
+- Any dependency/framework upgrade, server lifecycle redesign, public behavior change, branch-protection/required-check configuration, deployment, merge, or production mutation.
+- Security posture acceptance for Internet exposure. The README's non-productionized warning and absent server timeouts mean a green vulnerability scan does not authorize production use.
+
 ## Gap analysis
 
 | Priority | Evidence-backed gap | Safe next evidence | Boundary |
 |---|---|---|---|
 | 1 | GitHub branch protection is disabled. | Keep draft/no-merge guardrails; separately propose rules. | Governance change requires owner approval. |
-| 2 | Handler coverage is 67.5% after adding root, token, turn-selection, new-game, invalid-state, valid-state, SVG, and take-turn contracts. | Add only high-value behavior-preserving cases for still-uncovered error/victory seams. | Preserve observable behavior and dependencies. |
+| 2 | Handler coverage is 70.2% after adding routing, token, turn-selection, compressed/uncompressed state, AI/serialization, template escaping, SVG, and take-turn contracts. | Construct a dependency-supported deterministic victory fixture before asserting the remaining victory route. | Preserve observable behavior and dependencies. |
 | 3 | Server lifecycle uses the default mux and a blocking `ListenAndServe`; README explicitly says it is not productionized. | Document test seams and lifecycle risks before proposing changes. | Productionization is owner-reserved. |
 | 4 | Randomness is process-global and initialized in `main`, while handler behavior depends on it. | Use the existing seed contract to design deterministic tests. | No redesign or modernization in baseline work. |
 | 5 | The golden SVG test is broad but failure output is coarse; adapter-method coverage is unknown. | Run coverage and inspect gaps. | Add only dependency-free, behavior-preserving tests. |
