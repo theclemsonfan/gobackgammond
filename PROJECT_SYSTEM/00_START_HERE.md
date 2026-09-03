@@ -6,17 +6,18 @@
 - Verified adoption base: `2ab7266c52dbbccee113d7614e2af868eb9aabaa`
 - Application: Go HTTP backgammon server with handler and SVG packages
 - Production impact permitted: No
+- Control plane: stable AI Project OS `2.1.0`
 
 ## Durable milestone goal
 
-Establish a reproducible, behavior-preserving baseline and durable cloud-first control plane without merging, deploying, changing production, or modernizing dependencies.
+Use the stable Project OS for routine, behavior-preserving maintenance while keeping the application review-only: improve executable evidence, classify risks, and preserve a resumable control plane without merging, deploying, changing production, or modernizing dependencies.
 
-## Current five-outcome batch
+## Current five-outcome batch — first routine use
 
-1. Go-capable path: reconfirmed on GitHub Actions with exact Go `1.27.0` on Ubuntu 24.04 Linux/amd64.
-2. Test/vet/build/startup smoke: green at commit `79a53610e5707f333e27e164d26981c6e0a2878b`; total statement coverage measured at 64.2%.
-3. PR diff audit: complete, with process gaps, application defects, and legacy/dependency risks separated.
-4. Highest-value safe remediation: valid compressed-state, SVG, and take-turn characterization added without production-source or dependency changes.
-5. Durable controls: testing, backlog, owner inbox, health, Overwatch, and handoff reconciled with live draft PR #1.
+1. Verify live PR/base/head/check/protection state and adopt the stable `2.1.0` operating contract.
+2. Re-run the exact Go/CI baseline in the branch-scoped capable environment.
+3. Add a dependency-supported deterministic victory-route contract without production or dependency changes.
+4. Refresh lifecycle and maintenance risks with explicit safe, future-modernization, and owner-reserved boundaries.
+5. Persist the routine-use evidence and exact handoff on this isolated branch, then independently verify it.
 
 Stop only for completed authorized scope, a safety/permission boundary, or one blocker that prevents every remaining safe workstream.

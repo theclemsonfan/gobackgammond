@@ -32,6 +32,14 @@
 4. `R2-019` — hardened the retrofit control plane with CI evidence requirements, draft-PR browser fallback, branch-protection limits, and exact persistence/handoff verification.
 5. `R2-020` — prepared the validated second-pilot lessons for the reusable Project OS master and left exact pilot/master next actions.
 
+## First routine-use batch
+
+1. `R3-001` — verify live PR/base/head/check/protection state and adopt stable Project OS `2.1.0` in the repository control plane.
+2. `R3-002` — reproduce test, coverage, vet, pinned vulnerability scan, build, startup, and HTTP smoke evidence on the exact routine-use commit.
+3. `R3-003` — add deterministic victory-result characterization based on the pinned dependency's own completed-board construction; change no production source or dependency.
+4. `R3-004` — refresh the lifecycle and maintenance register, separating safe evidence work, future modernization, and owner-reserved governance/product choices.
+5. `R3-005` — persist the batch and exact handoff on the isolated branch and independently verify remote content, CI, PR state, and unchanged `master`.
+
 ## Project OS / process gaps
 
 | Priority | ID | Gap | Evidence / next safe action | Decision boundary |
@@ -52,7 +60,7 @@ No application defect is currently demonstrated. The unchanged production applic
 |---|---|---|---|---|
 | P1 | `APP-RISK-001` | The default mux and blocking server lifecycle limit isolated lifecycle testing and graceful shutdown. | Document seams and failure modes; do not refactor yet. | Productionization is owner-reserved. |
 | P1 | `APP-RISK-002` | Randomness is process-global, so test isolation depends on serial seeded execution. | Add deterministic cases only when they do not require concurrency or redesign. | Randomness redesign is product/architecture work. |
-| P1 | `APP-RISK-003` | Valid serialized-state and take-turn paths are covered, but deterministic victory routing coverage is still absent. | Find or construct a dependency-supported terminal state before adding a reversible contract. | Preserve current observable behavior. |
+| P1 | `APP-RISK-003` | A dependency-supported deterministic completed-board fixture is now defined for victory-route characterization. | Verify the exact HTTP result contract in branch CI and retain the evidence. | Preserve current observable behavior. |
 | P2 | `APP-RISK-004` | SVG golden-test failure output is coarse and adapter coverage is unknown. | Record coverage, then improve test diagnostics without changing rendering. | No dependency changes. |
 
 ## Legacy / dependency risks

@@ -49,6 +49,7 @@ None demonstrated. One proposed victory assertion failed in run `33283733265`; i
 
 - Fixed the CI runner label to Ubuntu 24.04 and made Go `1.27.0`, local toolchain selection, read-only module mode, proxy behavior, and `govulncheck v1.7.0` explicit.
 - Added dependency-free behavior characterization for routing failures, compressed/uncompressed state compatibility, AI ordering, serialization round trips, template escaping, SVG smoke, and invalid-state HTTP behavior.
+- Prepared deterministic victory-route characterization from the pinned dependency's own `TestTakeTurnSingleStakes` completed-board construction, expressed through its supported serialization format.
 - Preserved `main.go`, `handlers/handlers.go`, `svg/svg.go`, `go.mod`, `go.sum`, dependency pins, default branch, and production behavior.
 
 ### Future modernization
@@ -67,7 +68,7 @@ None demonstrated. One proposed victory assertion failed in run `33283733265`; i
 | Priority | Evidence-backed gap | Safe next evidence | Boundary |
 |---|---|---|---|
 | 1 | GitHub branch protection is disabled. | Keep draft/no-merge guardrails; separately propose rules. | Governance change requires owner approval. |
-| 2 | Handler coverage is 70.2% after adding routing, token, turn-selection, compressed/uncompressed state, AI/serialization, template escaping, SVG, and take-turn contracts. | Construct a dependency-supported deterministic victory fixture before asserting the remaining victory route. | Preserve observable behavior and dependencies. |
+| 2 | Handler coverage was 70.2% before the first routine-use batch; deterministic victory rendering was the primary remaining handler route. | Verify the dependency-supported completed-board fixture and exact victory response in branch CI. | Preserve observable behavior and dependencies. |
 | 3 | Server lifecycle uses the default mux and a blocking `ListenAndServe`; README explicitly says it is not productionized. | Document test seams and lifecycle risks before proposing changes. | Productionization is owner-reserved. |
 | 4 | Randomness is process-global and initialized in `main`, while handler behavior depends on it. | Use the existing seed contract to design deterministic tests. | No redesign or modernization in baseline work. |
 | 5 | The golden SVG test is broad but failure output is coarse; adapter-method coverage is unknown. | Run coverage and inspect gaps. | Add only dependency-free, behavior-preserving tests. |

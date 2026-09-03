@@ -1,6 +1,6 @@
 # AI Project OS Agent Instructions
 
-This repository uses AI Project OS `2.0.0-master` on the isolated retrofit branch `project-os/retrofit-pilot-2`. GitHub branch-protection rules are not currently enabled, so safety depends on the draft-PR/no-merge guardrail.
+This repository uses the stable AI Project OS `2.1.0` operating contract on the isolated branch `project-os/retrofit-pilot-2`. GitHub branch-protection rules are not currently enabled, so safety depends on the draft-PR/no-merge guardrail.
 
 Read every file in `PROJECT_SYSTEM/` before changing application code. Preflight the Go environment before executable claims. Missing tools are environment problems first; do not silently update Go modules or application behavior to fit the host.
 

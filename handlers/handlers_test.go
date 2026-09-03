@@ -14,6 +14,12 @@ import (
 
 const nearlyFinishedGameToken = "qlYqKlWyUjIxIhBShoawsEK4JNwEYa2hiVItIAAA__8"
 
+// This completed board follows the pinned gobackgammon v0.1.7 dependency's
+// TestTakeTurnSingleStakes construction: White has borne off all 15 checkers,
+// while Red has borne off 13 and has two on point 17. The handler accepts the
+// dependency's uncompressed serialization format as an existing public input.
+const deterministicWhiteVictorySerialization = `{"p":"W","p0":"W15","p17":"r2","p25":"r13"}`
+
 func TestRootHandlerContract(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	RootHandler(recorder, httptest.NewRequest(http.MethodGet, "/", nil))
@@ -293,5 +299,25 @@ func TestGameHandlerTakeTurnContract(t *testing.T) {
 	if !strings.Contains(body, "<title>Backgammon Game</title>") &&
 		!strings.Contains(body, "<title>Backgammon Game Results</title>") {
 		t.Errorf("response body is neither a continued game nor a victory result: %q", body)
+	}
+}
+
+func TestGameHandlerDeterministicVictoryContract(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	target := "/game?s=" + url.QueryEscape(deterministicWhiteVictorySerialization) + "&t="
+	GameHandler(recorder, httptest.NewRequest(http.MethodGet, target, nil))
+
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("status = %d, want %d; body = %s", recorder.Code, http.StatusOK, recorder.Body.String())
+	}
+	for _, want := range []string{
+		"<title>Backgammon Game Results</title>",
+		"The final score is White:1, Red:0.",
+		"Congratulations on winning 1 point, White!",
+		"/game.svg?s=",
+	} {
+		if !strings.Contains(recorder.Body.String(), want) {
+			t.Errorf("response body does not contain %q", want)
+		}
 	}
 }

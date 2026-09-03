@@ -19,3 +19,7 @@ Complete for the second-pilot lessons. CI evidence, browser fallback, branch-pro
 ## R4 — Owner review
 
 Reconcile live branch evidence. Merge, deployment, server productionization, and dependency/toolchain modernization remain separate owner decisions.
+
+## R5 — First routine maintenance use
+
+In progress on the isolated branch under stable Project OS `2.1.0`. The bounded milestone adds deterministic victory-route evidence derived from the pinned dependency's supported board model, refreshes lifecycle/maintenance risks, reruns the full branch CI contract, and persists an independently verifiable handoff. It does not change production source, dependencies, `master`, or PR draft status.
