@@ -65,3 +65,14 @@ Do not misstate static inspection as executable or CI evidence. Future results m
 - Executable claims above are derived from independently read GitHub Actions job steps and logs, not static inspection.
 
 For handoff writes, the pre-handoff SHA anchors the state used to compose the file. The commit containing a handoff cannot embed and verify its own SHA; post-write branch SHA and exact content require independent observation.
+
+## First routine-use verification
+
+- Source: GitHub Actions push run `33819014529`, job `100857382602`, and PR run `33819017762`, job `100857392347`.
+- Timestamp: 2026-09-03 23:46 UTC.
+- Branch/SHA: `project-os/retrofit-pilot-2` at `6b7312b439cf2df291910f38e0e4cf8ecd9f89fd`.
+- Environment contract: branch workflow pins Ubuntu 24.04, Go `1.27.0`, `GOTOOLCHAIN=local`, `GOFLAGS=-mod=readonly`, `GOPROXY=https://proxy.golang.org,direct`, and `govulncheck v1.7.0`.
+- Result: both runs completed successfully. Provider job data independently reports success for checkout, toolchain setup/environment recording, `go test ./...`, coverage measurement, `go vet ./...`, pinned reachable-vulnerability scan, build, and startup/root/game/SVG/invalid-state smoke steps.
+- New contract: a completed White board derived from pinned `gobackgammon v0.1.7`'s `TestTakeTurnSingleStakes` fixture renders the victory page, `White:1, Red:0`, and a one-point White victory through `GameHandler`.
+- Log limitation: the public API exposed exact run/job/step conclusions but returned `403` for the raw job-log archive, so this record does not claim a new numeric coverage percentage or quote scanner text. The coverage and scanner steps themselves passed; no artifact was published.
+- Scope: production Go source, `go.mod`, `go.sum`, dependencies, deployment, and `master` were unchanged.

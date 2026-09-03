@@ -23,6 +23,8 @@ Run `33349587401` and job `99360182171` verified the hardened characterization a
 
 Overall health remains amber because branch protection is procedural, the historical dependencies and module contract have no declared support policy, and server lifecycle productionization is explicitly out of scope. Draft PR #1 is open, draft, and unmerged. No application defect was demonstrated by this batch.
 
+The first routine-use batch under stable Project OS `2.1.0` passed both push and PR workflows at `6b7312b439cf2df291910f38e0e4cf8ecd9f89fd`. The deterministic completed-board fixture exercised the victory result without changing application source or dependencies. Health remains amber for the same governance, lifecycle, and support-policy reasons; a green routine maintenance batch does not imply production readiness.
+
 ## Current PR diff classification
 
 ### Project OS / process gaps

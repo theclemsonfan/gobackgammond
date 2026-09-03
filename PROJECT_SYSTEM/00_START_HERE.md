@@ -14,10 +14,10 @@ Use the stable Project OS for routine, behavior-preserving maintenance while kee
 
 ## Current five-outcome batch — first routine use
 
-1. Verify live PR/base/head/check/protection state and adopt the stable `2.1.0` operating contract.
-2. Re-run the exact Go/CI baseline in the branch-scoped capable environment.
-3. Add a dependency-supported deterministic victory-route contract without production or dependency changes.
-4. Refresh lifecycle and maintenance risks with explicit safe, future-modernization, and owner-reserved boundaries.
-5. Persist the routine-use evidence and exact handoff on this isolated branch, then independently verify it.
+1. Verified live PR/base/head/check/protection state and adopted the stable `2.1.0` operating contract.
+2. Re-ran the exact Go/CI baseline in the branch-scoped capable environment; push and PR runs passed at `6b7312b439cf2df291910f38e0e4cf8ecd9f89fd`.
+3. Added a dependency-supported deterministic victory-route contract without production or dependency changes.
+4. Refreshed lifecycle and maintenance risks with explicit safe, future-modernization, and owner-reserved boundaries.
+5. Prepared the persisted routine-use evidence and exact handoff for independent post-write verification.
 
 Stop only for completed authorized scope, a safety/permission boundary, or one blocker that prevents every remaining safe workstream.
