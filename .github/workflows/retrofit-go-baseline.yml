@@ -1,0 +1,95 @@
+name: Retrofit Go baseline
+
+on:
+  push:
+    branches:
+      - project-os/retrofit-pilot-2
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GO_VERSION: '1.27.0'
+  GOVULNCHECK_VERSION: 'v1.7.0'
+  GOTOOLCHAIN: local
+  GOFLAGS: -mod=readonly
+  GOPROXY: https://proxy.golang.org,direct
+
+concurrency:
+  group: retrofit-go-baseline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    name: Go baseline (no deploy)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out the exact branch revision
+        uses: actions/checkout@v7
+
+      - name: Install the verified Go toolchain
+        uses: actions/setup-go@v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: go.sum
+
+      - name: Record toolchain and module environment
+        run: |
+          go version
+          go env GOMOD GOPROXY GOOS GOARCH
+
+      - name: Test existing behavior
+        run: go test ./...
+
+      - name: Measure package coverage without publishing an artifact
+        run: |
+          go test -coverprofile="${RUNNER_TEMP}/coverage.out" ./...
+          go tool cover -func="${RUNNER_TEMP}/coverage.out"
+
+      - name: Vet existing behavior
+        run: go vet ./...
+
+      - name: Check reachable known vulnerabilities
+        run: go run golang.org/x/vuln/cmd/govulncheck@${GOVULNCHECK_VERSION} ./...
+
+      - name: Build server without publishing an artifact
+        run: go build -o "${RUNNER_TEMP}/gobackgammond" .
+
+      - name: Startup and HTTP route smoke check
+        run: |
+          "${RUNNER_TEMP}/gobackgammond" -port=18080 -seed=37 >"${RUNNER_TEMP}/server.log" 2>&1 &
+          server_pid=$!
+          cleanup() {
+            kill "$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          ready=0
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if curl --fail --silent --show-error --output "${RUNNER_TEMP}/root.html" http://127.0.0.1:18080/; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$ready" -ne 1 ]; then
+            echo "server did not become ready"
+            sed -n '1,120p' "${RUNNER_TEMP}/server.log"
+            exit 1
+          fi
+
+          grep -F '<title>Backgammon</title>' "${RUNNER_TEMP}/root.html"
+          curl --fail --silent --show-error --output "${RUNNER_TEMP}/game.html" http://127.0.0.1:18080/game
+          grep -F '<title>Backgammon Game</title>' "${RUNNER_TEMP}/game.html"
+          curl --fail --silent --show-error --output "${RUNNER_TEMP}/game.svg" 'http://127.0.0.1:18080/game.svg?s=qlYqKlWyUjIxIhBShoawsEK4JNwEYa2hiVItIAAA__8'
+          grep -F '<svg' "${RUNNER_TEMP}/game.svg"
+          invalid_status=$(curl --silent --show-error --output "${RUNNER_TEMP}/invalid.txt" --write-out '%{http_code}' http://127.0.0.1:18080/game?s=not-a-board)
+          test "$invalid_status" = '400'
+          grep -F 'error deserializing game state:' "${RUNNER_TEMP}/invalid.txt"

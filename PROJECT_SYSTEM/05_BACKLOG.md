@@ -1,0 +1,74 @@
+# Backlog
+
+## Completed first five safe outcomes
+
+1. `R2-001` — selected and fingerprinted the multi-component HTTP/handler/SVG pilot at exact base SHA.
+2. `R2-002` — created the isolated retrofit branch without changing `master` or production.
+3. `R2-003` — installed the repository-specific environment manifest and scoped missing Go as a partial blocker.
+4. `R2-004` — recorded the baseline contract, existing test surface, build commands, dependency pins, and safety boundaries.
+5. `R2-005` — completed the static baseline, health classification, evidence-backed gap analysis, Overwatch/persistence state, and durable handoff.
+
+## Completed second five-task batch outcomes
+
+1. `R2-006` — established and verified the branch-only GitHub Actions Go environment.
+2. `R2-007` — ran the unchanged executable baseline: test, vet, build, startup, root, and new-game smoke checks passed.
+3. `R2-008` — pinned the successfully observed Go `1.27.0` toolchain without changing `go.mod` or dependencies.
+4. `R2-009` — added dependency-free characterization for root HTML, token parsing, turn selection, new-game HTML, and invalid game state handling; cloud verification passed.
+5. `R2-010` — converted the amber analysis into this prioritized split backlog and reconciled testing/handoff evidence. At that batch boundary, draft PR publication was the remaining external control-surface action; it is now completed under `R2-011`.
+
+## Completed third five-task batch outcomes
+
+1. `R2-011` — independently verified draft PR #1: open, draft, unmerged, base `master` at `2ab7266c52dbbccee113d7614e2af868eb9aabaa`.
+2. `R2-012` — reconfirmed the exact Go `1.27.0` Linux/amd64 baseline on the branch-scoped Ubuntu 24.04 workflow.
+3. `R2-013` — ran test, coverage, vet, build, startup, `/`, and `/game` checks at `79a53610e5707f333e27e164d26981c6e0a2878b`; all passed after correcting one invalid test assumption.
+4. `R2-014` — audited the PR diff and separated Project OS/process gaps, actual application defects, and legacy/dependency risks; no production-source change or demonstrated application defect was found.
+5. `R2-015` — added valid compressed-state, SVG response, and take-turn characterization plus durable coverage reporting; no application behavior or dependency changed.
+
+## Completed fourth five-task batch outcomes
+
+1. `R2-016` — made Ubuntu 24.04, Go `1.27.0`, local toolchain selection, read-only module mode, proxy behavior, and the CI evidence contract explicit.
+2. `R2-017` — added risk-focused routing, uncompressed-state, AI, serialization, template-escaping, SVG, and invalid-state checks; push and PR workflows passed, with total coverage rising from 64.2% to 66.4%.
+3. `R2-018` — ran pinned `govulncheck v1.7.0` and completed the dependency/legacy/lifecycle/security audit; no reachable known vulnerabilities were reported and no dependency was upgraded.
+4. `R2-019` — hardened the retrofit control plane with CI evidence requirements, draft-PR browser fallback, branch-protection limits, and exact persistence/handoff verification.
+5. `R2-020` — prepared the validated second-pilot lessons for the reusable Project OS master and left exact pilot/master next actions.
+
+## Completed first routine-use batch
+
+1. `R3-001` — verified live PR/base/head/check/protection state and adopted stable Project OS `2.1.0` in the repository control plane.
+2. `R3-002` — reproduced test, coverage, vet, pinned vulnerability scan, build, startup, and HTTP smoke evidence at `6b7312b439cf2df291910f38e0e4cf8ecd9f89fd`; push run `33819014529` / job `100857382602` and PR run `33819017762` / job `100857392347` passed every named step.
+3. `R3-003` — added deterministic victory-result characterization based on the pinned dependency's own completed-board construction; changed no production source or dependency.
+4. `R3-004` — refreshed the lifecycle and maintenance register, separating safe evidence work, future modernization, and owner-reserved governance/product choices.
+5. `R3-005` — prepared the batch handoff for isolated-branch persistence and independent remote content, CI, PR, and `master` readback.
+
+## Project OS / process gaps
+
+| Priority | ID | Gap | Evidence / next safe action | Decision boundary |
+|---|---|---|---|---|
+| P0 | `PROC-001` | Draft PR review surface was missing. | Completed: PR #1 is open, draft, and unmerged with no-merge/no-deploy language. | Merge remains owner-reserved. |
+| P1 | `PROC-002` | `master` and retrofit branches are not protected by GitHub rules. | Keep draft/no-merge procedural guardrails; separately propose branch protection. | Enabling repository rules changes governance and requires owner approval. |
+| P1 | `PROC-003` | Action dependencies use major-version tags, not immutable SHAs. | Propose SHA pinning with update procedure. | Supply-chain policy choice; do not silently freeze/update actions. |
+| P2 | `PROC-004` | Controller host cannot run Go locally. | Use the verified cloud workflow; do not retrofit the controller. | No blocker while GitHub Actions is available. |
+| P2 | `PROC-005` | No documented Go-version support policy exists. | Treat Go `1.27.0` as the observed CI baseline only. | Adding a `go` directive or support matrix is owner-reserved modernization. |
+
+## Application defects
+
+No application defect is currently demonstrated. The unchanged production application passed tests, coverage, vet, build, startup, `/`, and `/game` on Go `1.27.0`; expanded characterization tests also passed. Run `33283733265` exposed an invalid proposed victory-test assumption, which was corrected without changing application code.
+
+## Application risks / unproven gaps
+
+| Priority | ID | Risk or gap | Next safe evidence | Decision boundary |
+|---|---|---|---|---|
+| P1 | `APP-RISK-001` | The default mux and blocking server lifecycle limit isolated lifecycle testing and graceful shutdown. | Document seams and failure modes; do not refactor yet. | Productionization is owner-reserved. |
+| P1 | `APP-RISK-002` | Randomness is process-global, so test isolation depends on serial seeded execution. | Add deterministic cases only when they do not require concurrency or redesign. | Randomness redesign is product/architecture work. |
+| P1 | `APP-RISK-003` | Completed: the dependency-supported deterministic fixture and exact HTTP victory result passed both push and PR CI. | Retain the contract during future maintenance. | Preserve current observable behavior. |
+| P2 | `APP-RISK-004` | SVG golden-test failure output is coarse and adapter coverage is unknown. | Record coverage, then improve test diagnostics without changing rendering. | No dependency changes. |
+
+## Legacy / dependency risks
+
+| Priority | ID | Risk | Next safe evidence | Decision boundary |
+|---|---|---|---|---|
+| P1 | `LEGACY-001` | Direct dependencies are historically pinned; `govulncheck v1.7.0` found no reachable known vulnerabilities, but maintenance/support posture remains uncertain. | Re-run the pinned scanner periodically and review upstream support before any upgrade proposal. | Do not update dependencies without owner approval. |
+| P1 | `LEGACY-002` | `go.mod` has no `go` directive or support policy. | Continue exact Go `1.27.0` evidence. | Module-policy change is owner-reserved. |
+| P1 | `LEGACY-003` | Default mux, blocking server lifecycle, and global RNG reduce isolation and graceful-shutdown options. | Preserve documented seams and failure modes. | Refactoring is product/architecture work. |
+
+Move repository-changing work to completed only after `PERSISTED`; a partial blocker never stops unrelated ready work.

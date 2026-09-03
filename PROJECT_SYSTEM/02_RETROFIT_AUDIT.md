@@ -1,0 +1,81 @@
+# Retrofit Audit and Health Classification
+
+## Inspection boundary
+
+This audit is derived from read-only inspection of `README.md`, `Makefile`, `go.mod`, `go.sum`, `main.go`, `handlers/handlers.go`, `svg/svg.go`, `svg/svg_test.go`, and Git history at adoption base `2ab7266c52dbbccee113d7614e2af868eb9aabaa`. No application code, dependency, default branch, deployment, or production state was changed.
+
+## Baseline architecture
+
+- `main.go` parses required `-port` and optional `-seed`, seeds the process-global random source, registers three routes on Go's default HTTP mux, and starts a blocking HTTP server.
+- `handlers` owns request parsing, board-state serialization/compression, AI continuation ordering, HTML rendering, and error responses for `/`, `/game`, and `/game.svg`.
+- local `svg` adapts the external SVGo writer to the board renderer.
+- dependencies are pinned in Go modules; the historical module intentionally has no `go` directive.
+- the Makefile exposes format, test, coverage, benchmark, vet, build, run, server, documentation, and clean targets.
+- the only current automated check is a deterministic golden SVG rendering test.
+
+## Health classification
+
+**`AMBER — EXECUTABLE_BASELINE_GREEN / DRAFT_REVIEW_ACTIVE`**
+
+The executable baseline is green on the isolated retrofit branch. GitHub Actions run `33281569224` verified the unchanged application at commit `68919e3ef4a8f9db8c0e73d133941dc81831eee4` with Go `1.27.0` on Linux/amd64: test, vet, build, process startup, `/`, and `/game` all passed. Run `33281651519` then verified the pinned toolchain and dependency-free handler characterization tests at commit `2190711eafa31b6d4c4f16f034002caf02a1f930`.
+
+Run `33349587401` and job `99360182171` verified the hardened characterization at commit `69eab3c9852e647373c8757af7b8f3ac8e881494`: test, coverage, vet, pinned `govulncheck v1.7.0`, build, startup, `/`, `/game`, `/game.svg`, and invalid-state HTTP checks passed. Handler statement coverage is 70.2%, SVG coverage is 100.0%, and repository-wide statement coverage is 66.4%. Govulncheck reported no reachable known vulnerabilities.
+
+Overall health remains amber because branch protection is procedural, the historical dependencies and module contract have no declared support policy, and server lifecycle productionization is explicitly out of scope. Draft PR #1 is open, draft, and unmerged. No application defect was demonstrated by this batch.
+
+The first routine-use batch under stable Project OS `2.1.0` passed both push and PR workflows at `6b7312b439cf2df291910f38e0e4cf8ecd9f89fd`. The deterministic completed-board fixture exercised the victory result without changing application source or dependencies. Health remains amber for the same governance, lifecycle, and support-policy reasons; a green routine maintenance batch does not imply production readiness.
+
+## Current PR diff classification
+
+### Project OS / process gaps
+
+- GitHub branch-protection rules remain disabled; safety depends on the draft/no-merge guardrail.
+- Actions use major-version tags rather than immutable commit SHAs.
+- The controller host lacks Go; the branch-scoped cloud workflow is the verified execution path.
+- The repository has no documented Go support matrix or module `go` directive.
+
+### Actual application defects
+
+None demonstrated. One proposed victory assertion failed in run `33283733265`; inspection showed that the test assumed an immediate victory the application never promises. The test was corrected to characterize the valid take-turn outcome without changing application behavior.
+
+### Legacy / dependency risks
+
+- Direct dependencies are pinned to `github.com/ajstarks/svgo` at a 2018 pseudo-version and `github.com/chandler37/gobackgammon v0.1.7`; compatibility and vulnerability posture were not modernized or independently certified.
+- The historical module omits a `go` directive, so the verified Go `1.27.0` baseline is evidence, not a declared minimum-support policy.
+- Process-global randomness and default-mux/blocking-server lifecycle constrain test isolation and graceful shutdown.
+- These are risks or architectural constraints, not proven defects, and remediation requires owner policy or product decisions.
+
+## Maintenance and modernization classification
+
+### Safe maintenance completed
+
+- Fixed the CI runner label to Ubuntu 24.04 and made Go `1.27.0`, local toolchain selection, read-only module mode, proxy behavior, and `govulncheck v1.7.0` explicit.
+- Added dependency-free behavior characterization for routing failures, compressed/uncompressed state compatibility, AI ordering, serialization round trips, template escaping, SVG smoke, and invalid-state HTTP behavior.
+- Prepared deterministic victory-route characterization from the pinned dependency's own `TestTakeTurnSingleStakes` completed-board construction, expressed through its supported serialization format.
+- Preserved `main.go`, `handlers/handlers.go`, `svg/svg.go`, `go.mod`, `go.sum`, dependency pins, default branch, and production behavior.
+
+### Future modernization
+
+- Evaluate supported Go versions, add a module `go` directive/support matrix, and assess the v0.1.8 game library only as a planned compatibility project.
+- Consider an explicit `http.Server`, dedicated mux, timeouts, graceful shutdown, request/body limits where applicable, structured logging, and isolated RNG injection.
+- Decide whether to pin GitHub Actions to immutable SHAs and establish an update cadence.
+
+### Owner-reserved changes
+
+- Any dependency/framework upgrade, server lifecycle redesign, public behavior change, branch-protection/required-check configuration, deployment, merge, or production mutation.
+- Security posture acceptance for Internet exposure. The README's non-productionized warning and absent server timeouts mean a green vulnerability scan does not authorize production use.
+
+## Gap analysis
+
+| Priority | Evidence-backed gap | Safe next evidence | Boundary |
+|---|---|---|---|
+| 1 | GitHub branch protection is disabled. | Keep draft/no-merge guardrails; separately propose rules. | Governance change requires owner approval. |
+| 2 | Handler coverage was 70.2% before the first routine-use batch; deterministic victory rendering was the primary remaining handler route. | Verify the dependency-supported completed-board fixture and exact victory response in branch CI. | Preserve observable behavior and dependencies. |
+| 3 | Server lifecycle uses the default mux and a blocking `ListenAndServe`; README explicitly says it is not productionized. | Document test seams and lifecycle risks before proposing changes. | Productionization is owner-reserved. |
+| 4 | Randomness is process-global and initialized in `main`, while handler behavior depends on it. | Use the existing seed contract to design deterministic tests. | No redesign or modernization in baseline work. |
+| 5 | The golden SVG test is broad but failure output is coarse; adapter-method coverage is unknown. | Run coverage and inspect gaps. | Add only dependency-free, behavior-preserving tests. |
+| 6 | Historical Go/module compatibility is unspecified by a `go` directive. | Keep CI pinned to the verified Go `1.27.0` baseline. | Adding/changing the module directive is a separate owner decision. |
+
+## Production protection
+
+The retrofit is isolated on `project-os/retrofit-pilot-2`, based on exact `master` SHA `2ab7266c52dbbccee113d7614e2af868eb9aabaa`. GitHub branch-protection rules were reported disabled, so operational protection is the explicit no-merge/no-deploy/no-production-change rule plus draft PR #1. Production application source remains byte-for-byte unchanged from the adoption base; only test code was added under `handlers/`.

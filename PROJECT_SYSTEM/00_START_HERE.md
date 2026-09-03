@@ -1,0 +1,23 @@
+# Start Here
+
+- Repository: `theclemsonfan/gobackgammond`
+- Preserved default branch: `master` (GitHub reports branch protection disabled)
+- Project OS branch: `project-os/retrofit-pilot-2`
+- Verified adoption base: `2ab7266c52dbbccee113d7614e2af868eb9aabaa`
+- Application: Go HTTP backgammon server with handler and SVG packages
+- Production impact permitted: No
+- Control plane: stable AI Project OS `2.1.0`
+
+## Durable milestone goal
+
+Use the stable Project OS for routine, behavior-preserving maintenance while keeping the application review-only: improve executable evidence, classify risks, and preserve a resumable control plane without merging, deploying, changing production, or modernizing dependencies.
+
+## Current five-outcome batch — first routine use
+
+1. Verified live PR/base/head/check/protection state and adopted the stable `2.1.0` operating contract.
+2. Re-ran the exact Go/CI baseline in the branch-scoped capable environment; push and PR runs passed at `6b7312b439cf2df291910f38e0e4cf8ecd9f89fd`.
+3. Added a dependency-supported deterministic victory-route contract without production or dependency changes.
+4. Refreshed lifecycle and maintenance risks with explicit safe, future-modernization, and owner-reserved boundaries.
+5. Prepared the persisted routine-use evidence and exact handoff for independent post-write verification.
+
+Stop only for completed authorized scope, a safety/permission boundary, or one blocker that prevents every remaining safe workstream.
